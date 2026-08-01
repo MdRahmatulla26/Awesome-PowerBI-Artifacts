@@ -1,0 +1,318 @@
+Power BI Time Intelligence DAX Cheat Sheet
+
+# Date Functions
+
+  Function   Description                     Example  
+                                            
+  TODAY()    Returns today's date             TODAY()   
+  NOW()      Returns current date and time    NOW()   
+  DATE()     Creates a date                   DATE(2026,7,1)   
+  YEAR()     Extract year                     YEAR(Date[Date])   
+  MONTH()    Extract month                    MONTH(Date[Date])   
+  DAY()      Extract day                      DAY(Date[Date])   
+  WEEKDAY()  Day of week                      WEEKDAY(Date[Date])   
+  WEEKNUM()  Week number                      WEEKNUM(Date[Date])   
+
+//////////////////////////////////////////////////////   
+
+# Previous Period
+
+* Previous Day
+
+DAX
+Sales Previous Day =
+CALCULATE(
+    [Total Sales],
+    PREVIOUSDAY('Date'[Date])
+)
+  
+
+* Previous Month
+
+DAX
+Sales Previous Month =
+CALCULATE(
+    [Total Sales],
+    PREVIOUSMONTH('Date'[Date])
+)
+   
+* Previous Quarter
+
+DAX
+Sales Previous Quarter =
+CALCULATE(
+    [Total Sales],
+    PREVIOUSQUARTER('Date'[Date])
+)
+   
+* Previous Year
+
+DAX
+Sales Previous Year =
+CALCULATE(
+    [Total Sales],
+    PREVIOUSYEAR('Date'[Date])
+)
+   
+//////////////////////////////////////////////////////
+
+# Next Period
+
+* Next Day
+
+DAX
+Sales Next Day =
+CALCULATE(
+    [Total Sales],
+    NEXTDAY('Date'[Date])
+)
+   
+* Next Month
+
+DAX
+Sales Next Month =
+CALCULATE(
+    [Total Sales],
+    NEXTMONTH('Date'[Date])
+)
+   
+* Next Quarter
+
+DAX
+Sales Next Quarter =
+CALCULATE(
+    [Total Sales],
+    NEXTQUARTER('Date'[Date])
+)
+   
+* Next Year
+
+DAX
+Sales Next Year =
+CALCULATE(
+    [Total Sales],
+    NEXTYEAR('Date'[Date])
+)
+   
+
+//////////////////////////////////////////////////////
+
+# Year To Date (YTD)
+
+DAX
+Sales YTD =
+TOTALYTD(
+    [Total Sales],
+    'Date'[Date]
+)
+   
+# Quarter To Date (QTD)
+
+DAX
+Sales QTD =
+TOTALQTD(
+    [Total Sales],
+    'Date'[Date]
+)
+
+# Month To Date (MTD)
+
+DAX
+Sales MTD =
+TOTALMTD(
+    [Total Sales],
+    'Date'[Date]
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# Running Total
+
+DAX
+Running Total =
+CALCULATE(
+    [Total Sales],
+    FILTER(
+        ALL('Date'),
+        'Date'[Date] <= MAX('Date'[Date])
+    )
+)
+   
+//////////////////////////////////////////////////////  
+
+# Same Period Last Year
+
+DAX
+Sales SPLY =
+CALCULATE(
+    [Total Sales],
+    SAMEPERIODLASTYEAR('Date'[Date])
+)
+   
+//////////////////////////////////////////////////////
+
+# Year Over Year (YoY)
+
+DAX
+YoY Growth =
+DIVIDE(
+    [Total Sales] [Sales Previous Year],
+    [Sales Previous Year]
+)
+   
+# Parallel Period
+
+DAX
+Sales Parallel Year =
+CALCULATE(
+    [Total Sales],
+    PARALLELPERIOD(
+        'Date'[Date],
+         1,
+        YEAR
+    )
+)
+
+//////////////////////////////////////////////////////
+   
+# Date Add
+
+DAX
+Sales DateAdd =
+CALCULATE(
+    [Total Sales],
+    DATEADD(
+        'Date'[Date],
+         1,
+        MONTH
+    )
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# Opening Balance
+
+DAX
+Opening Balance =
+OPENINGBALANCEMONTH(
+    [Total Sales],
+    'Date'[Date]
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# Closing Balance
+
+DAX
+Closing Balance =
+CLOSINGBALANCEMONTH(
+    [Total Sales],
+    'Date'[Date]
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# First Date
+
+DAX
+FIRSTDATE('Date'[Date])
+   
+//////////////////////////////////////////////////////
+
+# Last Date
+
+DAX
+LASTDATE('Date'[Date])
+   
+//////////////////////////////////////////////////////
+   
+# First Non Blank
+
+DAX
+FIRSTNONBLANK(
+    'Date'[Date],
+    [Total Sales]
+)
+   
+//////////////////////////////////////////////////////
+   
+# Last Non Blank
+
+DAX
+LASTNONBLANK(
+    'Date'[Date],
+    [Total Sales]
+)
+   
+//////////////////////////////////////////////////////  
+
+# Dates Between
+
+DAX
+Sales Between Dates =
+CALCULATE(
+    [Total Sales],
+    DATESBETWEEN(
+        'Date'[Date],
+        DATE(2026,1,1),
+        DATE(2026,12,31)
+    )
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# Dates In Period
+
+DAX
+Rolling 12 Months =
+CALCULATE(
+    [Total Sales],
+    DATESINPERIOD(
+        'Date'[Date],
+        MAX('Date'[Date]),
+         12,
+        MONTH
+    )
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# Rolling 30 Days
+
+DAX
+Rolling 30 Days =
+CALCULATE(
+    [Total Sales],
+    DATESINPERIOD(
+        'Date'[Date],
+        MAX('Date'[Date]),
+         30,
+        DAY
+    )
+)
+   
+
+//////////////////////////////////////////////////////   
+
+# Rolling 90 Days
+
+DAX
+Rolling 90 Days =
+CALCULATE(
+    [Total Sales],
+    DATESINPERIOD(
+        'Date'[Date],
+        MAX('Date'[Date]),
+         90,
+        DAY
+    )
+)
+   
+
+//////////////////////////////////////////////////////   
