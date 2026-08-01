@@ -1,5 +1,3 @@
-# Awesome-PowerBI-Artifacts
-
 
 # 🚀 Awesome Power BI Artifacts
 
