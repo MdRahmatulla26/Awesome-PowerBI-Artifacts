@@ -1,0 +1,437 @@
+Filter Context DAX Cheat Sheet
+
+- Report Filters
+- Page Filters
+- Visual Filters
+- Slicers
+- Relationships
+- CALCULATE()
+- Matrix/Table Rows
+- Drillthrough
+- Cross Highlighting
+
+
+# 1. CALCULATE()
+
+## Purpose
+
+Evaluates an expression under a modified Filter Context.
+
+## Syntax
+
+DAX
+CALCULATE(<expression>, <filter1>, <filter2>...)
+
+
+## Example
+
+DAX
+Total Sales =
+SUM(Sales[Sales Amount])
+
+Sales 2025 =
+CALCULATE(
+    [Total Sales],
+    'Date'[Year]=2025
+)
+
+
+## Result
+
+Only evaluates Sales for Year 2025.
+
+---
+
+# 2. CALCULATETABLE()
+
+## Purpose
+
+Returns a table after modifying Filter Context.
+
+## Syntax
+
+DAX
+CALCULATETABLE(<table>, filters...)
+
+
+## Example
+
+DAX
+Sales2025 =
+CALCULATETABLE(
+    Sales,
+    'Date'[Year]=2025
+)
+
+
+---
+
+# 3. FILTER()
+
+## Purpose
+
+Returns rows matching a condition.
+
+## Syntax
+
+DAX
+FILTER(Table, Condition)
+
+
+## Example
+
+DAX
+High Value Sales =
+CALCULATE(
+    [Total Sales],
+    FILTER(
+        Sales,
+        Sales[Sales Amount]>1000
+    )
+)
+
+
+---
+
+# 4. ALL()
+
+## Purpose
+
+Removes filters.
+
+## Syntax
+
+DAX
+ALL(Table)
+
+
+## Example
+
+DAX
+Grand Total =
+CALCULATE(
+    [Total Sales],
+    ALL(Product)
+)
+
+
+Result
+
+Ignores Product filters.
+
+---
+
+# 5. REMOVEFILTERS()
+
+## Purpose
+
+Clears filters.
+
+Preferred over ALL() when only removing filters.
+
+## Example
+
+DAX
+Grand Total =
+CALCULATE(
+    [Total Sales],
+    REMOVEFILTERS(Product)
+)
+
+
+---
+
+# 6. ALLEXCEPT()
+
+## Purpose
+
+Removes all filters except specified columns.
+
+## Syntax
+
+DAX
+ALLEXCEPT(Table, Column1, Column2)
+
+
+## Example
+
+DAX
+Sales By Year =
+CALCULATE(
+    [Total Sales],
+    ALLEXCEPT(
+        Date,
+        Date[Year]
+    )
+)
+
+
+---
+
+# 7. ALLSELECTED()
+
+## Purpose
+
+Keeps user selections while removing visual context.
+
+## Example
+
+DAX
+Selected Total =
+CALCULATE(
+    [Total Sales],
+    ALLSELECTED(Product)
+)
+
+
+Common Use
+
+Percentage of Selected Total
+
+---
+
+# 8. KEEPFILTERS()
+
+## Purpose
+
+Adds filters instead of replacing them.
+
+## Example
+
+DAX
+Red Sales =
+CALCULATE(
+    [Total Sales],
+    KEEPFILTERS(
+        Product[Color]="Red"
+    )
+)
+
+
+---
+
+# 9. CROSSFILTER()
+
+## Purpose
+
+Temporarily changes relationship direction.
+
+## Example
+
+DAX
+CALCULATE(
+    [Total Sales],
+    CROSSFILTER(
+        Sales[CustomerKey],
+        Customer[CustomerKey],
+        BOTH
+    )
+)
+
+
+---
+
+# 10. USERELATIONSHIP()
+
+## Purpose
+
+Activates an inactive relationship.
+
+## Example
+
+DAX
+Sales By Ship Date =
+CALCULATE(
+    [Total Sales],
+    USERELATIONSHIP(
+        Sales[ShipDate],
+        Date[Date]
+    )
+)
+
+
+---
+
+# 11. TREATAS()
+
+## Purpose
+
+Creates a virtual relationship.
+
+## Example
+
+DAX
+CALCULATE(
+    [Total Sales],
+    TREATAS(
+        VALUES(CustomerSelection[CustomerID]),
+        Sales[CustomerID]
+    )
+)
+
+
+---
+
+# 12. VALUES()
+
+## Purpose
+
+Returns unique values under current Filter Context.
+
+## Example
+
+DAX
+VALUES(Product[Category])
+
+
+Returns
+
+
+Bike
+Accessories
+Clothing
+
+
+---
+
+# 13. DISTINCT()
+
+## Purpose
+
+Returns distinct values.
+
+## Example
+
+DAX
+DISTINCT(Product[Category])
+
+
+---
+
+# 14. SELECTEDVALUE()
+
+## Purpose
+
+Returns the selected value.
+
+## Syntax
+
+DAX
+SELECTEDVALUE(Column,"Multiple")
+
+
+## Example
+
+DAX
+Current Category =
+SELECTEDVALUE(Product[Category])
+
+
+---
+
+# 15. HASONEVALUE()
+
+## Purpose
+
+Checks if exactly one value exists.
+
+## Example
+
+DAX
+HASONEVALUE(Product[Category])
+
+
+Returns
+
+TRUE/FALSE
+
+---
+
+# 16. HASONEFILTER()
+
+## Purpose
+
+Checks whether exactly one direct filter exists.
+
+## Example
+
+DAX
+HASONEFILTER(Product[Category])
+
+
+---
+
+# 17. ISFILTERED()
+
+## Purpose
+
+Checks whether a column is directly filtered.
+
+## Example
+
+DAX
+ISFILTERED(Product[Category])
+
+
+---
+
+# 18. ISCROSSFILTERED()
+
+## Purpose
+
+Checks whether a column is filtered directly or through relationships.
+
+## Example
+
+DAX
+ISCROSSFILTERED(Product[Category])
+
+
+---
+
+# 19. ALLNOBLANKROW()
+
+## Purpose
+
+Returns all rows except the automatically generated blank row.
+
+## Example
+
+DAX
+ALLNOBLANKROW(Product)
+
+
+---
+
+# 20. RELATED()
+
+## Purpose
+
+Retrieves a value from a related table.
+
+## Example
+
+DAX
+Category =
+RELATED(Product[Category])
+
+
+Typically used in Calculated Columns.
+
+---
+
+# 21. RELATEDTABLE()
+
+## Purpose
+
+Returns all related rows.
+
+## Example
+
+DAX
+Order Count =
+COUNTROWS(
+    RELATEDTABLE(Sales)
+)
+
+
